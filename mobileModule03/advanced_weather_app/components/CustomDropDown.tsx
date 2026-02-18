@@ -1,17 +1,20 @@
 import { Colors, tintColor } from "@/constants/theme";
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 import { ThemedText } from "./ThemedText";
+import { ReactElement } from "react";
 
 export type CustomDropdownProps = {
 	data: any[];
 	labelKey: string;
 	onChange: (value: any) => void;
+	icon?: ReactElement
 }
 
 export function CustomDropdown({
 	data,
 	labelKey,
-	onChange
+	onChange,
+	icon
 }: CustomDropdownProps) {
 	const colorScheme = useColorScheme();
 	const backgroundColor = Colors[colorScheme ?? 'light'].background;
@@ -34,6 +37,7 @@ export function CustomDropdown({
 								onChange(item);
 							}}
 						>
+							{icon && icon}
 							<ThemedText>{item[labelKey]}</ThemedText>
 						</TouchableOpacity>
 					))}
@@ -60,6 +64,9 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderRadius: 8,
 		borderWidth: 1,
+		flexDirection: "row",
+		gap: 6,
+		alignItems: "center"
 	},
 	dropdownList: {
 		marginLeft: 25,

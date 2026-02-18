@@ -7,6 +7,7 @@ import { useSearchlocation } from "@/providers/SearchLocationProvider";
 import * as Location from 'expo-location';
 import { GeocodingResponse, LocationChoice } from "@/types/Location";
 import { CustomDropdown } from "./CustomDropDown";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 export function Header() {
@@ -147,6 +148,9 @@ export function Header() {
 						data={locationChoices}
 						labelKey="customLabel"
 						onChange={handleLocationSelection}
+						icon={
+							<MaterialCommunityIcons name="city" size={24} color={tintColor} />
+						}
 					/>
 				)}
 			</View>
