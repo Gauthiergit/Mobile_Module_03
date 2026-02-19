@@ -30,8 +30,8 @@ export default function TabLayout() {
 					tabBarPosition="bottom"
 					screenOptions={{
 						tabBarActiveTintColor: tintColor,
-						tabBarInactiveTintColor: Colors[colorScheme ?? "light"].secondaryText,
-						tabBarLabelStyle: { fontSize: 20, textTransform: 'none' },
+						tabBarInactiveTintColor: Colors[colorScheme ?? "light"].greyText,
+						tabBarLabelStyle: { fontSize: 20, textTransform: 'none', fontFamily: "Nunito-Bold"},
 						tabBarIndicatorStyle: { backgroundColor: tintColor, height: 2, top: 0 },
 						tabBarStyle: { backgroundColor: 'transparent' },
 						swipeEnabled: true,

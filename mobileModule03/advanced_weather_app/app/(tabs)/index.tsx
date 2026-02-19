@@ -8,6 +8,7 @@ import { CurrentWeather } from '@/types/Weather';
 import { getWeatherDescription, getWeatherIcon, weatherMap } from '@/mappers/WeatherMap';
 import { WEATHER_URL } from '@/constants/url';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function CurrentlyScreen() {
 	const { location, errorMessage, setErrorMessage } = useSearchlocation();
@@ -15,6 +16,7 @@ export default function CurrentlyScreen() {
 	const [loading, setLoading] = useState(false);
 	const colorScheme = useColorScheme();
 	const tintColor = Colors[colorScheme ?? "light"].tintColor;
+	const blueText = Colors[colorScheme ?? "light"].blueText;
 
 	const fetchWeatherDatas = useCallback(async () => {
 		if (!location) return;
@@ -49,26 +51,28 @@ export default function CurrentlyScreen() {
 	}, [fetchWeatherDatas])
 
 	return (
-		<Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
+		<Pressable style={{flex: 1}} onPress={() => Keyboard.dismiss()}>
 			{loading ? (
 				<ActivityIndicator size="large" color={tintColor} />
 			) : (
-				<View style={styles.container}>
+				<>
 					{location && !errorMessage && (
-						<View style={styles.container}>
-							<ThemedText type="title">{location.name}</ThemedText>
-							<ThemedText type="title">{location.admin1}</ThemedText>
-							<ThemedText type="title">{location.country}</ThemedText>
-							{curWeather && !errorMessage && (
-								<>
-									<View style={styles.description}>
-										<MaterialCommunityIcons name={getWeatherIcon(curWeather.weatherCode) as any} size={50} color={tintColor} />
-										<ThemedText type="title" style={{ textAlign: 'center' }}>{getWeatherDescription(curWeather.weatherCode)}</ThemedText>
-									</View>
-									<ThemedText type="title">{curWeather.temperature?.toFixed(2)} °C</ThemedText>
-									<ThemedText type="title">{curWeather.windSpeed?.toFixed(2)} km/h</ThemedText>
-								</>
-							)}
+						<View style={styles.location}>
+							<ThemedText type="title" color={blueText}>{location.name}</ThemedText>
+							<ThemedText type="title">{location.admin1}, {location.country}</ThemedText>
+						</View>
+					)}
+					{curWeather && !errorMessage && (
+						<View style={styles.weather}>
+							<ThemedText type="title" color={tintColor}>{curWeather.temperature?.toFixed(2)} °C</ThemedText>
+							<View style={styles.description}>
+								<MaterialCommunityIcons name={getWeatherIcon(curWeather.weatherCode) as any} size={50} color={blueText} />
+								<ThemedText type="title" style={{ textAlign: 'center' }}>{getWeatherDescription(curWeather.weatherCode)}</ThemedText>
+							</View>
+							<View style={styles.wind}>
+								<FontAwesome5 name="wind" size={30} color={blueText} />
+								<ThemedText type="title">{curWeather.windSpeed?.toFixed(2)} km/h</ThemedText>
+							</View>
 						</View>
 					)}
 					{errorMessage && (
@@ -77,24 +81,33 @@ export default function CurrentlyScreen() {
 						</View>
 					)}
 
-				</View>
+				</>
 			)}
 		</Pressable>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
+	location: {
+		flex: 0.3,
 		alignItems: "center",
 		justifyContent: "center",
 		gap: 10,
-		backgroundColor: 'transparent'
+	},
+	weather: {
+		flex: 0.6,
+		alignItems: "center",
+		justifyContent: "space-evenly",
 	},
 	description: {
 		alignItems: "center",
 		justifyContent: "center",
-		gap: 10
+		gap: 3
+	},
+	wind: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 10,
 	},
 	error: {
 		flex: 1,

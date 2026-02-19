@@ -64,16 +64,14 @@ const styles = StyleSheet.create({
 	},
 	item: {
 		padding: 15,
-		borderBottomWidth: 1,
 		borderRadius: 8,
-		borderWidth: 1,
 		flexDirection: "row",
 		gap: 6,
 		alignItems: "center"
 	},
 	dropdownList: {
 		marginLeft: 25,
-		borderWidth: 1,
+		borderWidth: 2,
 		borderRadius: 8,
 		elevation: 5,
 		shadowColor: '#000',

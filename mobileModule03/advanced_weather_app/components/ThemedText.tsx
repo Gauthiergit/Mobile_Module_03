@@ -31,11 +31,10 @@ export function ThemedText({
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
-    lineHeight: 24,
+	fontFamily: "Nunito-Regular"
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
+	fontFamily: "Nunito-Bold"
   }
 });

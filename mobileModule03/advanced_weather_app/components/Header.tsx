@@ -142,7 +142,7 @@ export function Header() {
 				<TextInput
 					placeholder="Entrez une localisation..."
 					style={[styles.input, { color: Colors[colorScheme ?? "light"].text, borderColor: tintColor}]}
-					placeholderTextColor={Colors[colorScheme ?? "light"].secondaryText}
+					placeholderTextColor={Colors[colorScheme ?? "light"].greyText}
 					value={locationSearched}
 					onChangeText={setLocationSearched}
 					onSubmitEditing={handleLocationSubmit}
@@ -185,13 +185,14 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 40,
-		borderWidth: 1,
+		borderWidth: 2,
 		borderRadius: 8,
 		paddingHorizontal: 10,
+		fontFamily: "Nunito-Regular"
 	},
 	button: {
 		padding: 10,
 		borderRadius: 50,
-		borderWidth: 1
+		borderWidth: 2
 	},
 });
