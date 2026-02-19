@@ -53,7 +53,9 @@ export default function CurrentlyScreen() {
 	return (
 		<Pressable style={{flex: 1}} onPress={() => Keyboard.dismiss()}>
 			{loading ? (
-				<ActivityIndicator size="large" color={tintColor} />
+				<View style={{flex: 1, alignContent: "center", justifyContent: "center"}}>
+					<ActivityIndicator size="large" color={tintColor} />
+				</View>
 			) : (
 				<>
 					{location && !errorMessage && (

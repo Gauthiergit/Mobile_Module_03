@@ -7,4 +7,4 @@ start:
 	npx expo start
 
 clean:
-	rm -rf node_modules
+	rm -rf node_modules package-lock.json .expo

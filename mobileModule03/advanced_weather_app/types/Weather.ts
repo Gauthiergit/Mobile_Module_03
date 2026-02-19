@@ -9,6 +9,9 @@ export interface HourlyWeather {
 	temperature: number;
 	windSpeed: number;
 	weatherCode: number;
+	value?: number;
+	label?: string;
+	dataPointText?: string;
 }
 
 export interface WeeklyWeather {

@@ -8,7 +8,9 @@ import { formatHour } from '@/utils/format';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { fetchWeatherApi } from 'openmeteo';
 import { useEffect, useState, useCallback } from 'react';
-import { ActivityIndicator, Keyboard, ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, Keyboard, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { LineChart } from "react-native-gifted-charts";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function TodayScreen() {
 	const { location, errorMessage, setErrorMessage } = useSearchlocation();
@@ -16,6 +18,8 @@ export default function TodayScreen() {
 	const [hourlyWeather, setHourlyWeather] = useState<HourlyWeather[]>([]);
 	const colorScheme = useColorScheme();
 	const tintColor = Colors[colorScheme ?? "light"].tintColor;
+	const blueText = Colors[colorScheme ?? "light"].blueText;
+	const textcolor = Colors[colorScheme ?? "light"].text;
 
 	const fetchWeatherDatas = useCallback(async () => {
 		if (!location) return;
@@ -49,7 +53,10 @@ export default function TodayScreen() {
 					time: formatHour(date),
 					temperature: tempValues[i],
 					windSpeed: windValues[i],
-					weatherCode: hourly.variables(0)!.valuesArray()![i]
+					weatherCode: hourly.variables(0)!.valuesArray()![i],
+					value: tempValues[i],
+					label: i % 2 == 0 ? formatHour(date) : undefined,
+					dataPointText: `${tempValues[i].toFixed(2).toString()} °C`
 				});
 			}
 			setHourlyWeather(mapped);
@@ -65,7 +72,7 @@ export default function TodayScreen() {
 	}, [fetchWeatherDatas])
 
 	return (
-		<View style={{ flex: 1, backgroundColor: "transparent"}}>
+		<View style={{ flex: 1}}>
 			{loading ? (
 				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 					<ActivityIndicator size="large" color={tintColor} />
@@ -73,34 +80,64 @@ export default function TodayScreen() {
 			) : (
 				<>
 					{location && !errorMessage && (
-						<View style={{flex: 1}}>
-							<View style={styles.header}>
-								<ThemedText type="title">{location.name}</ThemedText>
-								<ThemedText type="title">{location.admin1}</ThemedText>
-								<ThemedText type="title">{location.country}</ThemedText>
+						<View style={styles.location}>
+							<ThemedText type="title" color={blueText}>{location.name}</ThemedText>
+							<ThemedText type="title">{location.admin1}, {location.country}</ThemedText>
+						</View>
+					)}
+					{hourlyWeather.length > 0 && !errorMessage && (
+						<View style={{flex: 1, justifyContent: "space-between"}}>
+							<View
+								style={{
+									padding: 20,
+									margin: 20,
+									backgroundColor: '#ae1f1221'
+								}}
+							>
+								<View style={{alignItems: "center", gap: 6}}>
+									<ThemedText>Températures d'aujourd'hui</ThemedText>
+									<LineChart
+										areaChart
+										curved 
+										data={hourlyWeather}
+										width={280}
+										color={tintColor}
+										dataPointsColor1={tintColor}
+										textColor1={textcolor}	
+										thickness={1}
+										startFillColor="rgba(105, 44, 20, 0.3)"
+										endFillColor="rgba(85, 38, 20, 0.01)"
+										startOpacity={0.9}
+										endOpacity={0.2}
+										yAxisColor={textcolor}
+										hideRules
+										xAxisLabelTextStyle={{color: textcolor}}
+										xAxisColor={textcolor}
+										isAnimated
+										hideYAxisText
+									/>
+								</View>
 							</View>
 							<ScrollView
 								style={styles.scrollView}
-								contentContainerStyle={styles.scrollContent}
-								scrollEnabled={true}
-								scrollEventThrottle={16}
 								onScrollBeginDrag={() => Keyboard.dismiss()}
 								keyboardShouldPersistTaps="handled"
+								horizontal={true}
 							>
-								{hourlyWeather.length > 0 && (
-									hourlyWeather.map((weather) => (
-										<View key={weather.time} style={styles.row}>
-											<ThemedText>{weather.time}</ThemedText>
-											<ThemedText>{weather.temperature?.toFixed(2)} °C</ThemedText>
-											<ThemedText>{weather.windSpeed?.toFixed(2)} km/h</ThemedText>
-											<View style={styles.weatherDescription}>
-												<MaterialCommunityIcons name={getWeatherIcon(weather.weatherCode) as any} size={24} color={tintColor} />
-												<ThemedText style={{ textAlign: 'center' }}>{getWeatherDescription(weather.weatherCode)}</ThemedText>
-											</View>
+								{hourlyWeather.map((weather) => (
+									<View key={weather.time} style={styles.column}>
+										<ThemedText>{weather.time}</ThemedText>
+										<View style={styles.weatherDescription}>
+											<MaterialCommunityIcons name={getWeatherIcon(weather.weatherCode) as any} size={24} color={blueText} />
+											<ThemedText style={{ textAlign: 'center' }}>{getWeatherDescription(weather.weatherCode)}</ThemedText>
 										</View>
-									))
-								)}
-								
+										<ThemedText color={tintColor}>{weather.temperature?.toFixed(2)} °C</ThemedText>
+										<View style={styles.wind}>
+											<FontAwesome5 name="wind" size={16} color={blueText} />
+											<ThemedText>{weather.windSpeed?.toFixed(2)} km/h</ThemedText>
+										</View>
+									</View>
+								))}
 							</ScrollView>
 						</View>
 					)}
@@ -117,35 +154,31 @@ export default function TodayScreen() {
 
 const styles = StyleSheet.create({
 	scrollView: {
-		flex: 1,
-		paddingHorizontal: 20,
-		backgroundColor: 'transparent'
+		padding: 10,
+		marginHorizontal: 20,
+		backgroundColor: '#ae1f1221'
 	},
-	header: {
-		paddingTop: 20,
-		paddingBottom: 10,
-		alignItems: "center"
-	},
-	scrollContent: {
-		paddingBottom: 20,
-		backgroundColor: 'transparent'
-	},
-	row: {
-		flexDirection: 'row',
-		justifyContent: "space-between",
-		width: '100%',
-		paddingVertical: 15,
-		paddingHorizontal: 10,
-		marginBottom: 5,
-		alignItems: 'center'
-	},
-	weatherDescription: {
-		maxWidth: '30%',
-		minWidth: '30%',
+	location: {
+		flex: 0.3,
 		alignItems: "center",
 		justifyContent: "center",
-		flexDirection: 'column',
-		gap: 8
+		gap: 10,
+	},
+	wind: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 10,
+	},
+	column: {
+		paddingHorizontal: 6,
+		marginRight: 6,
+		alignItems: "center",
+		gap: 6
+	},
+	weatherDescription: {
+		alignItems: "center",
+		justifyContent: "center",
+		gap: 4
 	},
 	error: {
 		flex: 1,
