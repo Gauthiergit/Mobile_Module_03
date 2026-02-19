@@ -105,9 +105,8 @@ export default function TodayScreen() {
 										dataPointsColor1={tintColor}
 										textColor1={textcolor}	
 										thickness={1}
-										startFillColor="rgba(105, 44, 20, 0.3)"
-										endFillColor="rgba(85, 38, 20, 0.01)"
-										startOpacity={0.9}
+										startFillColor={tintColor}
+										startOpacity={0.8}
 										endOpacity={0.2}
 										yAxisColor={textcolor}
 										hideRules

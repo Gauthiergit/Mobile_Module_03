@@ -19,4 +19,13 @@ export interface WeeklyWeather {
 	temperatureMax: number;
 	temperatureMin: number;
 	weatherCode: number;
+	value?: number;
+	label?: string;
+	dataPointText?: string;
+}
+
+export interface MinTempWeather {
+	value?: number;
+	label?: string;
+	dataPointText?: string;
 }
