@@ -1,4 +1,4 @@
-import { Colors, secondaryTextColor, tintColor } from "@/constants/theme";
+import { Colors } from "@/constants/theme";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, useColorScheme, View, Platform, Keyboard } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -11,12 +11,13 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 export function Header() {
+	const colorScheme = useColorScheme();
+	const tintColor = Colors[colorScheme ?? "light"].tintColor;
 	const { setLocation, setErrorMessage } = useSearchlocation();
 	const [locationSearched, setLocationSearched] = useState<string>("");
 	const [debouncedQuery, setDebouncedQuery] = useState<string>("");
 	const [locationChoices, setLocationChoices] = useState<LocationChoice[]>();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const colorScheme = useColorScheme();
 	const geocodingUrl = "https://geocoding-api.open-meteo.com/v1/search"
 
 	async function getCurrentLocation() {
@@ -140,8 +141,8 @@ export function Header() {
 			<View style={{ flex: 1, position: 'relative' }}>
 				<TextInput
 					placeholder="Entrez une localisation..."
-					style={[styles.input, { color: Colors[colorScheme ?? "light"].text }]}
-					placeholderTextColor={secondaryTextColor}
+					style={[styles.input, { color: Colors[colorScheme ?? "light"].text, borderColor: tintColor}]}
+					placeholderTextColor={Colors[colorScheme ?? "light"].secondaryText}
 					value={locationSearched}
 					onChangeText={setLocationSearched}
 					onSubmitEditing={handleLocationSubmit}
@@ -162,7 +163,8 @@ export function Header() {
 				onPress={getCurrentLocation}
 				style={({ pressed }) => [
 					{ opacity: pressed ? 0.5 : 1 },
-					styles.button
+					styles.button,
+					{borderColor: tintColor}
 				]}
 			>
 				<MaterialIcons name="gps-fixed" size={24} color={tintColor} />
@@ -183,7 +185,6 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 40,
-		borderColor: tintColor,
 		borderWidth: 1,
 		borderRadius: 8,
 		paddingHorizontal: 10,
@@ -191,7 +192,6 @@ const styles = StyleSheet.create({
 	button: {
 		padding: 10,
 		borderRadius: 50,
-		borderColor: tintColor,
 		borderWidth: 1
 	},
 });

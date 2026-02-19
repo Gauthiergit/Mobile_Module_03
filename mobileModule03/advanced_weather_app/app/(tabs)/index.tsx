@@ -1,8 +1,8 @@
 import { ThemedText } from '@/components/ThemedText';
-import { errorTextColor, Styles, tintColor } from '@/constants/theme';
+import { Colors, errorTextColor } from '@/constants/theme';
 import { useSearchlocation } from '@/providers/SearchLocationProvider';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Keyboard, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Keyboard, Pressable, StyleSheet, useColorScheme, View } from 'react-native';
 import { fetchWeatherApi } from "openmeteo"
 import { CurrentWeather } from '@/types/Weather';
 import { getWeatherDescription, getWeatherIcon, weatherMap } from '@/mappers/WeatherMap';
@@ -13,6 +13,8 @@ export default function CurrentlyScreen() {
 	const { location, errorMessage, setErrorMessage } = useSearchlocation();
 	const [curWeather, setCurWeather] = useState<CurrentWeather | null>(null);
 	const [loading, setLoading] = useState(false);
+	const colorScheme = useColorScheme();
+	const tintColor = Colors[colorScheme ?? "light"].tintColor;
 
 	const fetchWeatherDatas = useCallback(async () => {
 		if (!location) return;
@@ -47,11 +49,11 @@ export default function CurrentlyScreen() {
 	}, [fetchWeatherDatas])
 
 	return (
-		<Pressable style={Styles.container} onPress={() => Keyboard.dismiss()}>
+		<Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
 			{loading ? (
 				<ActivityIndicator size="large" color={tintColor} />
 			) : (
-				<View style={{ flex: 1 }}>
+				<View style={styles.container}>
 					{location && !errorMessage && (
 						<View style={styles.container}>
 							<ThemedText type="title">{location.name}</ThemedText>
@@ -86,7 +88,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
-		gap: 10
+		gap: 10,
+		backgroundColor: 'transparent'
 	},
 	description: {
 		alignItems: "center",

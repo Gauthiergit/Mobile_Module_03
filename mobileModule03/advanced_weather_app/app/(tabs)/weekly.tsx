@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/ThemedText';
-import { errorTextColor, Styles, tintColor } from '@/constants/theme';
+import { Colors, errorTextColor } from '@/constants/theme';
 import { WEATHER_URL } from '@/constants/url';
 import { getWeatherDescription, getWeatherIcon } from '@/mappers/WeatherMap';
 import { useSearchlocation } from '@/providers/SearchLocationProvider';
@@ -8,12 +8,14 @@ import { formatDate } from '@/utils/format';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { fetchWeatherApi } from 'openmeteo';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Keyboard, StyleSheet, View, ScrollView } from 'react-native';
+import { ActivityIndicator, Keyboard, StyleSheet, View, ScrollView, useColorScheme } from 'react-native';
 
 export default function WeeklyScreen() {
 	const { location, errorMessage, setErrorMessage } = useSearchlocation();
 	const [loading, setLoading] = useState(false);
 	const [weeklyWeather, setWeeklyWeather] = useState<WeeklyWeather[]>([]);
+	const colorScheme = useColorScheme();
+	const tintColor = Colors[colorScheme ?? "light"].tintColor;
 
 	const fetchWeatherDatas = useCallback(async () => {
 		if (!location) return;
@@ -64,7 +66,7 @@ export default function WeeklyScreen() {
 	}, [fetchWeatherDatas])
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1, backgroundColor: "transparent"}}>
 			{loading ? (
 				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 					<ActivityIndicator size="large" color={tintColor} />
@@ -116,7 +118,8 @@ export default function WeeklyScreen() {
 const styles = StyleSheet.create({
 	scrollView: {
 		flex: 1,
-		paddingHorizontal: 20
+		paddingHorizontal: 20,
+		backgroundColor: 'transparent'
 	},
 	header: {
 		paddingTop: 20,
@@ -124,7 +127,8 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	scrollContent: {
-		paddingBottom: 20
+		paddingBottom: 20,
+		backgroundColor: 'transparent'
 	},
 	row: {
 		flexDirection: 'row',

@@ -1,4 +1,4 @@
-import { Colors, tintColor } from "@/constants/theme";
+import { Colors } from "@/constants/theme";
 import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ReactElement } from "react";
@@ -10,6 +10,7 @@ export type CustomDropdownProps = {
 	icon?: ReactElement
 }
 
+
 export function CustomDropdown({
 	data,
 	labelKey,
@@ -18,9 +19,11 @@ export function CustomDropdown({
 }: CustomDropdownProps) {
 	const colorScheme = useColorScheme();
 	const backgroundColor = Colors[colorScheme ?? 'light'].background;
+	const tintColor = Colors[colorScheme ?? "light"].tintColor;
+
 	return (
 		<View style={styles.container} pointerEvents="box-none">
-			<View style={[styles.dropdownList, { backgroundColor: backgroundColor }]} pointerEvents="auto">
+			<View style={[styles.dropdownList, { backgroundColor: backgroundColor, borderColor: tintColor}]} pointerEvents="auto">
 				<ScrollView
 					nestedScrollEnabled={true}
 					keyboardShouldPersistTaps="handled"
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
 	dropdownList: {
 		marginLeft: 25,
 		borderWidth: 1,
-		borderColor: tintColor,
 		borderRadius: 8,
 		elevation: 5,
 		shadowColor: '#000',
