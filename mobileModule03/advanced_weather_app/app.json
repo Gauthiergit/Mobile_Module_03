@@ -38,36 +38,6 @@
             "backgroundColor": "#000000"
           }
         }
-      ],
-	  [
-        "expo-font",
-        {
-          "fonts": [
-			  "./assets/fonts/Nunito-Regular.ttf",
-			  "./assets/fonts/Nunito-Bold.ttf"
-          ],
-          "android": {
-            "fonts": [
-              {
-                "fontFamily": "Nunito",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/Nunito-Regular.ttf",
-                    "weight": 700
-                  },
-                  {
-                    "path": "./assets/fonts/Nunito-Bold.ttf",
-                    "weight": 700,
-					"style": "bold"
-                  }
-                ]
-              }
-            ]
-          },
-          "ios": {
-            "fonts": ["./assets/fonts/Nunito-Regular.ttf", "./assets/fonts/Nunito-Bold.ttf"]
-          }
-        }
       ]
     ],
     "experiments": {
